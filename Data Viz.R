@@ -26,7 +26,7 @@ d=data.frame(a=sample(1:20,6),
             d=sample(1:20,6)
             )
 ggplot(d,aes(xmin=a,xmax=b,ymin=c,ymax=d))+
-  geom_rect(color='blue',fill='white',size=2)
+  geom_rect(color='blue',fill='white',size=1)
 
 
 ## ------------------------------------------------------------------------
@@ -44,9 +44,9 @@ p+geom_point()
 p=ggplot(mtcars,aes(x=wt,y=mpg,color=vs))
 
 p+geom_point()
+#but vs only has 0 and 1 values. 
 
-
-
+#to fix that qw have to use as.factor() function
 
 
 ## ------------------------------------------------------------------------
@@ -59,8 +59,8 @@ p+geom_point()
 
 ## ------------------------------------------------------------------------
 mtcars$am=as.factor(mtcars$am)
-
-p=ggplot(mtcars,aes(x=wt,y=mpg,color=vs,shape=am,size=cyl))
+mtcars$cyl=as.factor(mtcars$cyl)
+p=ggplot(mtcars,aes(x=wt,y=mpg,color=cyl,shape=vs,size=am))
 
 p+geom_point()
 
@@ -105,7 +105,7 @@ ggplot(f_sub,aes(x=DepDelay))+geom_density()
 
 # boxplots
 
-ggplot(f_sub,aes(x=DepDelay))+geom_boxplot()
+ggplot(f_sub,aes(y=DepDelay))+geom_boxplot()
 
 # counting number of extreme values on the higher side
 # IQR(f_sub$DepDelay)
@@ -120,12 +120,12 @@ ggplot(f_sub,aes(x=DepDelay))+geom_boxplot()
 ggplot(f_sub,aes(x="DepDelay",y=DepDelay))+geom_violin()+coord_flip()
 
 # comparing density with normal
-
+  
 ggplot(f_sub,aes(x=DepDelay))+geom_density(color="red")+
   stat_function(fun=dnorm,
-                args=list(mean=mean(f_sub$DepDelay),
-                          sd=sd(f_sub$DepDelay)),
-                color="green")
+              args=list(mean=mean(f_sub$DepDelay),
+                            sd=sd(f_sub$DepDelay)),
+              color="green")
 
 ###### single categorical variable
 
@@ -145,7 +145,7 @@ ggplot(f_sub,aes(x=UniqueCarrier))+
 
 ggplot(f_sub,aes(x=UniqueCarrier))+
   geom_bar(fill='white',color='blue',width=0.5)+
-  coord_flip()+
+  coord_polar()+
   xlab("Carrier Name")+
   ylab(" Frequency")+
   ggtitle("Carrier Frequencies")
@@ -158,7 +158,7 @@ ggplot(f_sub,aes(x=UniqueCarrier))+
 ### num-cat
 
 ggplot(mtcars,aes(x=am,y=mpg))+geom_boxplot()
-
+ggplot(mtcars,aes(x=am,y=mpg))+geom_density()
 # how to plot density curves of two categories in the same visualisation
 
 ## bar charts without frequency on y axis
@@ -167,11 +167,11 @@ df = data.frame(Months=c("Jan","Feb","Mar","Apr"),
                 Sales=c(4.2, 10, 29.5,15))
 
 ggplot(df, aes(x=Months, y=Sales)) +
-  geom_bar(stat='identity')
+  geom_bar(stat='identity') #how to sort by month
 
 ggplot(df, aes(x=Months, y=Sales)) +
   geom_bar(stat='identity',aes(fill=Months))+
-  geom_text(aes(label=Sales),vjust=-0.5)
+  geom_text(aes(label=Sales),vjust=-0.5) #hjust,angle
 
 ### how to give a predefined order to values on the x axis ?
 
@@ -201,7 +201,7 @@ p
 
 # Change legend position
 p + theme(legend.position="top")
-p + theme(legend.position="bottom")
+  p + theme(legend.position="bottom")
 
 
 # Remove legend
